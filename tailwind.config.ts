@@ -26,7 +26,8 @@ export default {
 				foreground: 'hsl(var(--foreground))',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					foreground: 'hsl(var(--primary-foreground))',
+					glow: 'hsl(var(--primary-glow))'
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
@@ -42,7 +43,8 @@ export default {
 				},
 				accent: {
 					DEFAULT: 'hsl(var(--accent))',
-					foreground: 'hsl(var(--accent-foreground))'
+					foreground: 'hsl(var(--accent-foreground))',
+					glow: 'hsl(var(--accent-glow))'
 				},
 				popover: {
 					DEFAULT: 'hsl(var(--popover))',
@@ -51,6 +53,28 @@ export default {
 				card: {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
+				},
+				success: {
+					DEFAULT: 'hsl(var(--success))',
+					foreground: 'hsl(var(--success-foreground))'
+				},
+				warning: {
+					DEFAULT: 'hsl(var(--warning))',
+					foreground: 'hsl(var(--warning-foreground))'
+				},
+				teacher: {
+					DEFAULT: 'hsl(var(--teacher))',
+					foreground: 'hsl(var(--teacher-foreground))'
+				},
+				student: {
+					DEFAULT: 'hsl(var(--student))',
+					foreground: 'hsl(var(--student-foreground))'
+				},
+				score: {
+					excellent: 'hsl(var(--score-excellent))',
+					good: 'hsl(var(--score-good))',
+					average: 'hsl(var(--score-average))',
+					poor: 'hsl(var(--score-poor))'
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
