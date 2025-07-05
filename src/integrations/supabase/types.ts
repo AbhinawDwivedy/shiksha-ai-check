@@ -51,6 +51,7 @@ export type Database = {
           description: string | null
           id: string
           name: string
+          school_id: string
           subject: string
           teacher_id: string
         }
@@ -59,6 +60,7 @@ export type Database = {
           description?: string | null
           id?: string
           name: string
+          school_id: string
           subject: string
           teacher_id: string
         }
@@ -67,10 +69,18 @@ export type Database = {
           description?: string | null
           id?: string
           name?: string
+          school_id?: string
           subject?: string
           teacher_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "classes_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "classes_teacher_id_fkey"
             columns: ["teacher_id"]
@@ -152,6 +162,30 @@ export type Database = {
           full_name?: string
           id?: string
           role?: string
+        }
+        Relationships: []
+      }
+      schools: {
+        Row: {
+          address: string | null
+          created_at: string
+          created_by: string
+          id: string
+          name: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          created_by: string
+          id?: string
+          name: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          created_by?: string
+          id?: string
+          name?: string
         }
         Relationships: []
       }

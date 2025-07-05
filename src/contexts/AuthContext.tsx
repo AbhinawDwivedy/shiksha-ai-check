@@ -7,7 +7,6 @@ interface AuthContextType {
   profile: UserProfile | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<void>
-  signUp: (email: string, password: string, fullName: string, role: 'teacher' | 'student') => Promise<void>
   signOut: () => Promise<void>
 }
 
@@ -70,7 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .single()
 
       if (error) throw error
-      setProfile(data)
+      setProfile(data as UserProfile)
     } catch (error) {
       console.error('Error fetching profile:', error)
     } finally {
@@ -86,27 +85,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (error) throw error
   }
 
-  const signUp = async (email: string, password: string, fullName: string, role: 'teacher' | 'student') => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    })
-    if (error) throw error
-
-    if (data.user) {
-      // Create profile
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          id: data.user.id,
-          email,
-          full_name: fullName,
-          role,
-        })
-      if (profileError) throw profileError
-    }
-  }
-
   const signOut = async () => {
     const { error } = await supabase.auth.signOut()
     if (error) throw error
@@ -118,7 +96,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       profile,
       loading,
       signIn,
-      signUp,
       signOut,
     }}>
       {children}

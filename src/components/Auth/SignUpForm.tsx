@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -7,9 +7,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/hooks/use-toast'
 import { Eye, EyeOff, BookOpen } from 'lucide-react'
+import { supabase } from '@/integrations/supabase/client'
 
 interface SignUpFormProps {
   onToggleMode: () => void
+}
+
+interface School {
+  id: string
+  name: string
+  address: string | null
+}
+
+interface Class {
+  id: string
+  name: string
+  subject: string
+  school_id: string
 }
 
 export function SignUpForm({ onToggleMode }: SignUpFormProps) {
@@ -19,15 +33,122 @@ export function SignUpForm({ onToggleMode }: SignUpFormProps) {
   const [role, setRole] = useState<'teacher' | 'student'>('student')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
-  const { signUp } = useAuth()
+  
+  // Teacher-specific fields
+  const [schoolName, setSchoolName] = useState('')
+  const [schoolAddress, setSchoolAddress] = useState('')
+  const [className, setClassName] = useState('')
+  const [subject, setSubject] = useState('')
+  
+  // Student-specific fields
+  const [schools, setSchools] = useState<School[]>([])
+  const [classes, setClasses] = useState<Class[]>([])
+  const [selectedSchoolId, setSelectedSchoolId] = useState('')
+  const [selectedClassId, setSelectedClassId] = useState('')
+  
   const { toast } = useToast()
+
+  // Fetch schools and classes for students
+  useEffect(() => {
+    if (role === 'student') {
+      fetchSchools()
+    }
+  }, [role])
+
+  useEffect(() => {
+    if (selectedSchoolId) {
+      fetchClasses(selectedSchoolId)
+    } else {
+      setClasses([])
+      setSelectedClassId('')
+    }
+  }, [selectedSchoolId])
+
+  const fetchSchools = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('schools')
+        .select('*')
+        .order('name')
+      
+      if (error) throw error
+      setSchools(data || [])
+    } catch (error) {
+      console.error('Error fetching schools:', error)
+    }
+  }
+
+  const fetchClasses = async (schoolId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('classes')
+        .select('*')
+        .eq('school_id', schoolId)
+        .order('name')
+      
+      if (error) throw error
+      setClasses(data || [])
+    } catch (error) {
+      console.error('Error fetching classes:', error)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
     try {
-      await signUp(email, password, fullName, role)
+      // Basic signup
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/`,
+          data: {
+            full_name: fullName,
+            role: role
+          }
+        }
+      })
+
+      if (authError) throw authError
+
+      if (authData.user && role === 'teacher') {
+        // Create school and class for teacher
+        const { data: schoolData, error: schoolError } = await supabase
+          .from('schools')
+          .insert({
+            name: schoolName,
+            address: schoolAddress || null,
+            created_by: authData.user.id
+          })
+          .select()
+          .single()
+
+        if (schoolError) throw schoolError
+
+        const { error: classError } = await supabase
+          .from('classes')
+          .insert({
+            name: className,
+            subject: subject,
+            school_id: schoolData.id,
+            teacher_id: authData.user.id
+          })
+
+        if (classError) throw classError
+      } else if (authData.user && role === 'student' && selectedClassId) {
+        // Enroll student in selected class
+        const { error: enrollError } = await supabase
+          .from('class_enrollments')
+          .insert({
+            student_id: authData.user.id,
+            class_id: selectedClassId
+          })
+
+        if (enrollError) throw enrollError
+      }
+
       toast({
         title: "Account created!",
         description: "Please check your email to verify your account.",
@@ -116,10 +237,98 @@ export function SignUpForm({ onToggleMode }: SignUpFormProps) {
               </SelectContent>
             </Select>
           </div>
+
+          {/* Teacher-specific fields */}
+          {role === 'teacher' && (
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="schoolName">School Name</Label>
+                <Input
+                  id="schoolName"
+                  type="text"
+                  placeholder="Enter school name"
+                  value={schoolName}
+                  onChange={(e) => setSchoolName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="schoolAddress">School Address (Optional)</Label>
+                <Input
+                  id="schoolAddress"
+                  type="text"
+                  placeholder="Enter school address"
+                  value={schoolAddress}
+                  onChange={(e) => setSchoolAddress(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="className">Class Name</Label>
+                <Input
+                  id="className"
+                  type="text"
+                  placeholder="e.g., Grade 10A, Class VII-B"
+                  value={className}
+                  onChange={(e) => setClassName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="subject">Subject</Label>
+                <Input
+                  id="subject"
+                  type="text"
+                  placeholder="e.g., Mathematics, Science, English"
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  required
+                />
+              </div>
+            </>
+          )}
+
+          {/* Student-specific fields */}
+          {role === 'student' && (
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="school">Select School</Label>
+                <Select value={selectedSchoolId} onValueChange={setSelectedSchoolId}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Choose your school" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {schools.map((school) => (
+                      <SelectItem key={school.id} value={school.id}>
+                        {school.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              {selectedSchoolId && (
+                <div className="space-y-2">
+                  <Label htmlFor="class">Select Class</Label>
+                  <Select value={selectedClassId} onValueChange={setSelectedClassId}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choose your class" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {classes.map((cls) => (
+                        <SelectItem key={cls.id} value={cls.id}>
+                          {cls.name} - {cls.subject}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+            </>
+          )}
+
           <Button
             type="submit"
             className="w-full"
-            disabled={loading}
+            disabled={loading || (role === 'student' && !selectedClassId)}
           >
             {loading ? "Creating account..." : "Create Account"}
           </Button>
