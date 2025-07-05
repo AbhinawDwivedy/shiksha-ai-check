@@ -92,6 +92,28 @@ export function SignUpForm({ onToggleMode }: SignUpFormProps) {
     }
   }
 
+  const waitForProfile = async (userId: string, maxAttempts = 10): Promise<boolean> => {
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('id', userId)
+          .single()
+        
+        if (data && !error) {
+          return true
+        }
+        
+        // Wait before next attempt
+        await new Promise(resolve => setTimeout(resolve, 1000))
+      } catch (error) {
+        console.log(`Profile check attempt ${attempt} failed:`, error)
+      }
+    }
+    return false
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -112,8 +134,12 @@ export function SignUpForm({ onToggleMode }: SignUpFormProps) {
       if (authError) throw authError
 
       if (authData.user) {
-        // Wait for the trigger to create the profile
-        await new Promise(resolve => setTimeout(resolve, 2000))
+        // Wait for the profile to be created
+        const profileCreated = await waitForProfile(authData.user.id)
+        
+        if (!profileCreated) {
+          throw new Error('Profile creation timed out. Please try again.')
+        }
 
         if (role === 'teacher') {
           // Create school and class for teacher
