@@ -1,184 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ShikshaCheck Design System - Educational Platform Colors & Styles */
+/* ShikshaCheck Design System - Modern Educational Platform */
 
 @layer base {
   :root {
-    /* Base Colors - Clean Educational Theme */
-    --background: 240 20% 99%;
-    --foreground: 220 15% 15%;
+    /* Base Colors - Modern Clean Theme */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
 
     /* Card & Surface Colors */
     --card: 0 0% 100%;
-    --card-foreground: 220 15% 15%;
+    --card-foreground: 240 10% 3.9%;
     
     --popover: 0 0% 100%;
-    --popover-foreground: 220 15% 15%;
+    --popover-foreground: 240 10% 3.9%;
 
-    /* Primary - Educational Blue */
-    --primary: 210 95% 47%;
+    /* Primary - Vibrant Purple Brand */
+    --primary: 262 83% 58%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 210 100% 65%;
+    --primary-light: 264 100% 82%;
+    --primary-dark: 262 83% 48%;
 
-    /* Secondary - Calm Gray-Blue */
-    --secondary: 215 25% 97%;
-    --secondary-foreground: 220 15% 25%;
+    /* Secondary - Modern Gray */
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
 
     /* Muted Colors */
-    --muted: 215 25% 96%;
-    --muted-foreground: 220 10% 50%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
 
-    /* Accent - Success Green */
-    --accent: 145 80% 42%;
-    --accent-foreground: 0 0% 100%;
-    --accent-glow: 145 85% 55%;
+    /* Accent Colors */
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+    --accent-purple: 270 95% 75%;
+    --accent-blue: 221 83% 53%;
+    --accent-green: 142 76% 36%;
+    --accent-orange: 25 95% 53%;
 
     /* Status Colors */
-    --success: 145 80% 42%;
+    --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
     /* Interactive Elements */
-    --border: 215 15% 90%;
-    --input: 215 15% 94%;
-    --ring: 210 95% 47%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 262 83% 58%;
 
     /* Educational Specific Colors */
-    --teacher: 270 75% 55%;
+    --teacher: 221 83% 53%;
     --teacher-foreground: 0 0% 100%;
-    --student: 195 85% 50%;
+    --student: 142 76% 36%;
     --student-foreground: 0 0% 100%;
 
     /* Feedback Colors */
-    --score-excellent: 145 80% 42%;
+    --score-excellent: 142 76% 36%;
     --score-good: 60 90% 50%;
     --score-average: 38 92% 50%;
-    --score-poor: 0 84% 60%;
+    --score-poor: 0 84.2% 60.2%;
 
     /* Layout */
     --radius: 0.75rem;
 
+    /* Sidebar */
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
+    --sidebar-primary: 262 83% 58%;
     --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
+    --sidebar-accent: 220 14.3% 95.9%;
+    --sidebar-accent-foreground: 220.9 39.3% 11%;
     --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 262 83% 58%;
   }
 
   .dark {
-    /* Dark Mode - Educational Night Theme */
-    --background: 220 25% 8%;
-    --foreground: 215 25% 95%;
+    /* Dark Mode - Modern Night Theme */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
 
-    --card: 220 20% 12%;
-    --card-foreground: 215 25% 95%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
     
-    --popover: 220 20% 12%;
-    --popover-foreground: 215 25% 95%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 210 100% 65%;
-    --primary-foreground: 220 25% 8%;
-    --primary-glow: 210 100% 75%;
+    --primary: 262 83% 58%;
+    --primary-foreground: 210 40% 98%;
+    --primary-light: 264 100% 82%;
+    --primary-dark: 262 83% 48%;
 
-    --secondary: 220 15% 18%;
-    --secondary-foreground: 215 20% 85%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 220 15% 15%;
-    --muted-foreground: 215 15% 65%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 145 85% 55%;
-    --accent-foreground: 220 25% 8%;
-    --accent-glow: 145 90% 65%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
 
-    --success: 145 85% 55%;
-    --success-foreground: 220 25% 8%;
-    --warning: 38 95% 60%;
-    --warning-foreground: 220 25% 8%;
-    --destructive: 0 85% 65%;
-    --destructive-foreground: 220 25% 8%;
+    --success: 142 76% 36%;
+    --success-foreground: 210 40% 98%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 220 15% 20%;
-    --input: 220 15% 18%;
-    --ring: 210 100% 65%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 262 83% 58%;
 
-    --teacher: 270 80% 65%;
-    --teacher-foreground: 220 25% 8%;
-    --student: 195 90% 60%;
-    --student-foreground: 220 25% 8%;
+    --teacher: 221 83% 53%;
+    --teacher-foreground: 210 40% 98%;
+    --student: 142 76% 36%;
+    --student-foreground: 210 40% 98%;
 
-    --score-excellent: 145 85% 55%;
-    --score-good: 60 95% 60%;
-    --score-average: 38 95% 60%;
-    --score-poor: 0 85% 65%;
+    --score-excellent: 142 76% 36%;
+    --score-good: 60 90% 50%;
+    --score-average: 38 92% 50%;
+    --score-poor: 0 62.8% 30.6%;
 
-    --sidebar-background: 220 20% 10%;
-    --sidebar-foreground: 215 20% 85%;
-    --sidebar-primary: 210 100% 65%;
-    --sidebar-primary-foreground: 220 25% 8%;
-    --sidebar-accent: 220 15% 15%;
-    --sidebar-accent-foreground: 215 20% 85%;
-    --sidebar-border: 220 15% 18%;
-    --sidebar-ring: 210 100% 65%;
-  }
-
-  /* Custom Gradients */
-  .gradient-primary {
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-  }
-
-  .gradient-accent {
-    background: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent-glow)));
-  }
-
-  .gradient-teacher {
-    background: linear-gradient(135deg, hsl(var(--teacher)), hsl(270 80% 65%));
-  }
-
-  .gradient-student {
-    background: linear-gradient(135deg, hsl(var(--student)), hsl(195 90% 60%));
-  }
-
-  /* Animations */
-  .animate-fade-in {
-    animation: fadeIn 0.5s ease-out;
-  }
-
-  .animate-slide-up {
-    animation: slideUp 0.4s ease-out;
-  }
-
-  .animate-bounce-subtle {
-    animation: bounceSubtle 2s infinite;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes bounceSubtle {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-3px); }
+    --sidebar-background: 222.2 84% 4.9%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 217.2 32.6% 17.5%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217.2 32.6% 17.5%;
+    --sidebar-ring: 262 83% 58%;
   }
 }
 
@@ -188,6 +143,179 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-poppins font-semibold;
+  }
+}
+
+@layer components {
+  /* Modern Gradients */
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-light)) 100%);
+  }
+
+  .gradient-secondary {
+    background: linear-gradient(135deg, hsl(var(--accent-blue)) 0%, hsl(var(--primary)) 100%);
+  }
+
+  .gradient-accent {
+    background: linear-gradient(135deg, hsl(var(--accent-purple)) 0%, hsl(var(--primary-light)) 100%);
+  }
+
+  .gradient-surface {
+    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--secondary)) 100%);
+  }
+
+  .gradient-teacher {
+    background: linear-gradient(135deg, hsl(var(--teacher)) 0%, hsl(var(--primary)) 100%);
+  }
+
+  .gradient-student {
+    background: linear-gradient(135deg, hsl(var(--student)) 0%, hsl(var(--accent-blue)) 100%);
+  }
+
+  /* Glass Morphism Effects */
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+
+  .glass-dark {
+    @apply bg-black/10 backdrop-blur-md border border-white/10;
+  }
+
+  /* Custom Shadows */
+  .shadow-glow {
+    box-shadow: 0 0 40px hsl(var(--primary) / 0.15);
+  }
+
+  .shadow-glow-strong {
+    box-shadow: 0 0 60px hsl(var(--primary) / 0.25);
+  }
+
+  .shadow-inset {
+    box-shadow: inset 0 2px 4px 0 hsl(0 0% 0% / 0.06);
+  }
+
+  /* Hover Effects */
+  .hover-lift {
+    @apply transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg;
+  }
+
+  .hover-glow {
+    @apply transition-all duration-300 hover:shadow-glow;
+  }
+
+  .hover-scale {
+    @apply transition-transform duration-200 hover:scale-105;
+  }
+
+  /* Custom Animations */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .animate-bounce-subtle {
+    animation: bounceSubtle 3s infinite;
+  }
+
+  /* Text Effects */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent;
+  }
+
+  .text-shine {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-light)) 50%, hsl(var(--primary)) 100%);
+    background-size: 200% 200%;
+    animation: shine 3s ease-in-out infinite;
+    @apply bg-clip-text text-transparent;
+  }
+}
+
+/* Keyframe Animations */
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-20px); 
+  }
+}
+
+@keyframes glow {
+  from { 
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.3); 
+  }
+  to { 
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.6); 
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes bounceSubtle {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-5px); 
+  }
+}
+
+@keyframes shine {
+  0% { 
+    background-position: 200% 200%; 
+  }
+  100% { 
+    background-position: -200% -200%; 
   }
 }
