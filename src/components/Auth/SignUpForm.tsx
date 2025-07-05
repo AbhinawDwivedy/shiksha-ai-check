@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/hooks/use-toast'
 import { Eye, EyeOff, BookOpen } from 'lucide-react'
 import { supabase } from '@/integrations/supabase/client'
@@ -98,12 +97,11 @@ export function SignUpForm({ onToggleMode }: SignUpFormProps) {
     setLoading(true)
 
     try {
-      // Basic signup
+      // Basic signup with metadata
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/`,
           data: {
             full_name: fullName,
             role: role
@@ -113,47 +111,67 @@ export function SignUpForm({ onToggleMode }: SignUpFormProps) {
 
       if (authError) throw authError
 
-      if (authData.user && role === 'teacher') {
-        // Create school and class for teacher
-        const { data: schoolData, error: schoolError } = await supabase
-          .from('schools')
-          .insert({
-            name: schoolName,
-            address: schoolAddress || null,
-            created_by: authData.user.id
-          })
-          .select()
-          .single()
+      if (authData.user) {
+        // Wait for the trigger to create the profile
+        await new Promise(resolve => setTimeout(resolve, 2000))
 
-        if (schoolError) throw schoolError
+        if (role === 'teacher') {
+          // Create school and class for teacher
+          const { data: schoolData, error: schoolError } = await supabase
+            .from('schools')
+            .insert({
+              name: schoolName,
+              address: schoolAddress || null,
+              created_by: authData.user.id
+            })
+            .select()
+            .single()
 
-        const { error: classError } = await supabase
-          .from('classes')
-          .insert({
-            name: className,
-            subject: subject,
-            school_id: schoolData.id,
-            teacher_id: authData.user.id
-          })
+          if (schoolError) {
+            console.error('School creation error:', schoolError)
+            throw new Error('Failed to create school')
+          }
 
-        if (classError) throw classError
-      } else if (authData.user && role === 'student' && selectedClassId) {
-        // Enroll student in selected class
-        const { error: enrollError } = await supabase
-          .from('class_enrollments')
-          .insert({
-            student_id: authData.user.id,
-            class_id: selectedClassId
-          })
+          if (schoolData) {
+            const { error: classError } = await supabase
+              .from('classes')
+              .insert({
+                name: className,
+                subject: subject,
+                school_id: schoolData.id,
+                teacher_id: authData.user.id
+              })
 
-        if (enrollError) throw enrollError
+            if (classError) {
+              console.error('Class creation error:', classError)
+              throw new Error('Failed to create class')
+            }
+          }
+        } else if (role === 'student' && selectedClassId) {
+          // Enroll student in selected class
+          const { error: enrollError } = await supabase
+            .from('class_enrollments')
+            .insert({
+              student_id: authData.user.id,
+              class_id: selectedClassId
+            })
+
+          if (enrollError) {
+            console.error('Enrollment error:', enrollError)
+            throw new Error('Failed to enroll in class')
+          }
+        }
+
+        toast({
+          title: "Account created successfully!",
+          description: "You can now sign in with your credentials.",
+        })
+
+        // Switch to login form
+        onToggleMode()
       }
-
-      toast({
-        title: "Account created!",
-        description: "Please check your email to verify your account.",
-      })
     } catch (error: any) {
+      console.error('Sign up error:', error)
       toast({
         title: "Sign up failed",
         description: error.message || "Failed to create account",
@@ -209,6 +227,7 @@ export function SignUpForm({ onToggleMode }: SignUpFormProps) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                minLength={6}
               />
               <Button
                 type="button"
